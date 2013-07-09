@@ -1,0 +1,85 @@
+@CHARSET "ISO-8859-1";
+
+@charset "utf-8";
+/* CSS Document */
+
+.vitrine{
+	width: 100%;
+}
+div.imagem
+{
+  margin: 3px;
+  border: 1px solid #000000;
+  height: auto;
+  width: auto;
+  float: left; /* alinhamento a esquerda */
+  text-align: center; /* texto da legenda alinhado no centro */
+  font-family: Arial;
+  font-size: 12px;
+  background-color:#D2D2D2;
+}
+div.bg_imagem{
+  background-image: url('../img/find.png');
+  background-position: center;
+  background-repeat: no-repeat;			
+}
+/* formatação das imagens */
+div.imagem img
+{
+  display: inline; /* exibição das imagens alinhadas */
+  margin: 1px;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+/* uma borda será exibida quando passar o mouse sobre a imagem */
+div.imagem a:hover img {
+	solid: #000;
+	border-left: 1px solid #ffffff;
+  	border-top: 1px solid #ffffff;
+  	border-bottom: 2px solid #000;
+  	border-right: 2px solid #000;	}
+/* formataçao do texto que servirá como legenda para as imagens */
+div.legenda
+{
+  font-size:16px;
+  text-shadow:#333;
+  text-align: center;
+  font-weight: normal;
+  width: 235px; /* define o tamanho da área em que será exibida a legenda -
+			se o valor for menor que a quantidade de caracteres, 
+			ocorre uma quebra de linha */
+  margin: 2px;
+}
+div.legenda_todo{
+  background-color:#AEAEAE;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+  border-bottom: 2px solid #000;
+  border-right: 2px solid #000;			
+  font-size:16px;
+  text-shadow:#333;
+  text-align: center;
+  font-weight: normal;
+  width: 237px; /* define o tamanho da área em que será exibida a legenda -
+			se o valor for menor que a quantidade de caracteres, 
+			ocorre uma quebra de linha */
+  margin: 2px;
+}
+div.legenda_todo:hover{
+  color: #ffffff;
+  background-color:#AEAAAA;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+  border-bottom: 2px solid #000;
+  border-right: 2px solid #000;		
+  font-size:16px;
+  text-shadow:#333;
+  text-align: center;
+  font-weight: normal;
+  width: 237px; /* define o tamanho da área em que será exibida a legenda -
+			se o valor for menor que a quantidade de caracteres, 
+			ocorre uma quebra de linha */
+  margin: 2px;
+}
