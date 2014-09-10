@@ -68,6 +68,12 @@ switch ($tela):
 					?>
 				</fieldset>
 </form>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 </div>
 <?php 
 		break;
@@ -93,13 +99,6 @@ switch ($tela):
 						else:
 							$duplicado = FALSE;
 						endif;
-						if($usu_admin->usuJaExiste('email',$_POST['email'])):
-							printMsg('Este email ja está cadastrado, escolha outro endereço.','erro');
-							$duplicado = TRUE;
-						else:
-							$duplicado = FALSE;
-							
-						endif;
 						if($duplicado != TRUE):
 							$usu_admin->inserir($usu_admin);
 							if($usu_admin->linhas_afetadas == 1):
@@ -122,12 +121,6 @@ switch ($tela):
 						));
 						if($usu_dono_loja->usuJaExiste('login',$_POST['login'])):
 							printMsg('Este login ja está cadastrado, escolha outro nome de usuário.','erro');
-							$duplicado = TRUE;
-						else:
-							$duplicado = FALSE;
-						endif;
-						if($usu_dono_loja->usuJaExiste('email',$_POST['email'])):
-							printMsg('Este email ja está cadastrado, escolha outro endereço.','erro');
 							$duplicado = TRUE;
 						else:
 							$duplicado = FALSE;
@@ -158,12 +151,6 @@ switch ($tela):
 						else:
 							$duplicado = FALSE;
 						endif;
-						if($usu_dono_prop->usuJaExiste('email',$_POST['email'])):
-							printMsg('Este email ja está cadastrado, escolha outro endereço.','erro');
-							$duplicado = TRUE;
-						else:
-							$duplicado = FALSE;
-						endif;
 						if($duplicado != TRUE):
 							$usu_dono_prop->inserir($usu_dono_prop);
 							if($usu_dono_prop->linhas_afetadas == 1):
@@ -190,12 +177,6 @@ switch ($tela):
 						else:
 							$duplicado = FALSE;	
 						endif;
-						if($usu_dono_carro->usuJaExiste('email',$_POST['email'])):
-							printMsg('Este email ja está cadastrado, escolha outro endereço.','erro');
-							$duplicado = TRUE;
-						else:
-							$duplicado = FALSE;
-						endif;
 						if($duplicado != TRUE):
 							$usu_dono_carro->inserir($usu_dono_carro);
 							if($usu_dono_carro->linhas_afetadas == 1):
@@ -211,10 +192,8 @@ switch ($tela):
 				$(document).ready(function(){
 					$(".userForm").validate({
 						rules:{
-							nome:{required:true, minlength:3},
-							email:{required:true, email:true},
-							validade:{required:true, rangelength:[10,12]},	
-							telefone:{required:true, rangelength:[8,10]},
+							nome:{required:true, minlength:3},	
+							telefone:{required:true, rangelength:[10,20]},
 							login:{required:true, minlength:5},
 							senha:{required:true, rangelength:[4,10]},
 							senhaconf:{required:true,equalTo:"#senha"},
@@ -299,9 +278,9 @@ switch ($tela):
 						while($resp = $user->retorna_dados()):
 						
 							if($resp->tipo == 'administrador')$link = '<a href="?m=usuarios&t=incluir" title="Novo cadastro"><img src="img/plus.png" alt="Novo cadastro" /></a> ';
-							if($resp->tipo == 'dono de carro')$link = '<a href="?m=veiculos_usu&t=incluir&user_id='.$resp->id.'" title="Novo carro"><img src="img/car.png" alt="Novo carro" /></a> ';
+							if($resp->tipo == 'dono de carro')$link = '<a href="?m=veiculos&t=incluir&user_id='.$resp->id.'&q=usu" title="Novo carro"><img src="img/car.png" alt="Novo carro" /></a> ';
 							if($resp->tipo == 'dono de loja'):
-								$link = '<a href="?m=veiculos_loja&t=incluir&user_id='.$resp->id.'" title="Novo carro na loja"><img src="img/car.png" alt="Novo carro na loja" /></a> '.
+								$link = '<a href="?m=veiculos&t=incluir&user_id='.$resp->id.'&q=loja" title="Novo carro na loja"><img src="img/car.png" alt="Novo carro na loja" /></a> '.
 										'<a href="?m=lojas&t=incluir&user_id='.$resp->id.'" title="Nova loja"><img src="img/shop.png" alt="Nova loja" /></a>';
 							endif;	
 							if($resp->tipo == 'dono de propaganda')$link = '<a href="?m=prop&t=incluir&user_id='.$resp->id.'" title="Novo anuncio"><img src="img/anuncio.png" alt="Novo anuncio" /></a> ';
@@ -352,12 +331,6 @@ switch ($tela):
 						$user_bd->extras_select =  " WHERE id=$id";
 						$user_bd->seleciona_tudo($user_bd);
 						$resp = $user_bd->retorna_dados();
-						if($resp->email != $_POST['email']):
-							if($user_bd->usuJaExiste('email',$_POST['email'])):
-								printMsg('Este email ja existe no sistema, escolha outro email.','erro');
-								$duplicado = TRUE;
-							endif;
-						endif;
 						if(isset($duplicado) != TRUE):
 							$user_bd->atualizar($user_bd);
 							if($user_bd->linhas_afetadas == 1):
@@ -383,9 +356,7 @@ switch ($tela):
 					$(".userForm").validate({
 						rules:{
 							nome:{required:true, minlength:3},
-							email:{required:true, email:true},
-							validade:{required:true, rangelength:[10,12]},	
-							telefone:{required:true, rangelength:[8,10]},
+							telefone:{required:true, rangelength:[10,20]},
 							tipo:{required:true, tipo:true}
 						}
 					});

@@ -17,8 +17,10 @@ class objPropagandas extends base{
 				"logo"					=> NULL,
 				"cidade"				=> NULL,
 				"estado"				=> NULL,
-				"telefone_cel"			=> NULL,
-				"telefone_res"			=> NULL,
+				"telefone1"				=> NULL,
+				"telefone2"				=> NULL,
+				"telefone3"				=> NULL,
+				"telefone4"				=> NULL,
 				"email"					=> NULL,
 				"descricao"				=> NULL,
 				"img_1"					=> NULL,
@@ -26,6 +28,8 @@ class objPropagandas extends base{
 				"img_3"					=> NULL,
 				"img_4"					=> NULL,
 				"propaganda_completa"	=> NULL,
+				"google_map"			=> NULL,
+				"google_link"			=> NULL
 			);
 		else:
 			$this->campos_valores = $campos;	

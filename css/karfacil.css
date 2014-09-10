@@ -86,7 +86,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 	padding:14px;
 }
 .link:hover{
-	background-image:url('../img_karfacil/menu_hover.png');
+	color: yellow;
 	background-repeat:repeat-x;
 	padding:14px;
 	

@@ -23,6 +23,7 @@ switch ($tela):
 				"dono_id"		=> $dono_id,
 				"nome" 			=> $_POST['nome'],
 				"bairro"		=> $_POST['bairro'],
+				"rua"			=> $_POST['rua'],
 				"numero"		=> $_POST['numero'],
 				"cep"			=> $_POST['cep'],
 				"CNPJ"			=> $_POST['CNPJ'],
@@ -31,6 +32,8 @@ switch ($tela):
 				"telefone_res"	=> $_POST['telefone_res'],
 				"telefone_cel"	=> $_POST['telefone_cel'],
 				"email"			=> $_POST['email'],
+				"google_map"	=> $_POST['google_map'],
+				"google_link"	=> $_POST['google_link'],
 				"logo"			=> preparar_nome($_FILES['logo']),
 				"loja_foto"		=> preparar_nome($_FILES['loja_foto']),
 			));
@@ -40,12 +43,7 @@ switch ($tela):
 			else:
 				$duplicado = FALSE;
 			endif;
-			if($loja->lojaJaExiste('CNPJ',$_POST['CNPJ'])):
-				printMsg('Este CNPJ ja está cadastrado, escolha outro CNPJ.','erro');
-				$duplicado = TRUE;
-			else:
-				$duplicado = FALSE;
-			endif;
+			
 			if($duplicado != TRUE):
 				$loja->inserir($loja);
 				if($loja->linhas_afetadas == 1):
@@ -71,15 +69,10 @@ switch ($tela):
 						rules:{
 							loja_nome:{required:true},
 							nome:{required:true},
-							bairro:{required:true},
 							numero:{required:true},
-							cep:{required:true},
-							CNPJ:{required:true},
 							cidade:{required:true},
 							estados:{required:true},
 							telefone_res:{required:true,rangelength:[6,14]},
-							telefone_cel:{required:true,rangelength:[6,14]},
-							email:{required:true, email:true},
 							logo:{required:true},
 							loja_foto:{required:true}
 						}
@@ -117,6 +110,8 @@ switch ($tela):
 					</li>
 					<li><label for="bairro">Bairro:</label> <input type="text" size="50" name="bairro" value="<?php echo $_POST['bairro']='' ?>">
 					</li>
+					<li><label for="rua">Rua:</label> <input type="text" size="50" name="rua" value="<?php echo $_POST['rua']='' ?>">
+					</li>
 					<li><label for="numero">Número:</label> <input type="text" size="50" name="numero" value="<?php echo $_POST['numero']='' ?>">
 					</li>
 					<li><label for="cep">Cep:</label> <input type="text" size="25" name="cep" value="<?php echo $_POST['cep']='' ?>">
@@ -152,11 +147,16 @@ switch ($tela):
 							<OPTION VALUE="SP">SP</OPTION>
 							<OPTION VALUE="TO">TO</OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php echo $_POST['telefone_res']='' ?>">
+					<li><label for="telefone_res">Telefone 1:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php echo $_POST['telefone_res']='' ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php echo $_POST['telefone_cel']='' ?>">
+					<li><label for="telefone_cel">Telefone 2:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php echo $_POST['telefone_cel']='' ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" value="<?php echo $_POST['email']='' ?>">
+					</li>
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" value="<?php echo $_POST['google_link']='' ?>">
+					</li>
+					<li>
+					<label for="google_map">Google map:</label> <textarea name="google_map" cols="20" rows="5"></textarea>
 					</li>
 					<li><label for="logo">Logomarca:</label> <input type="file" size="25" name="logo" value="<?php echo $_POST['logo']='' ?>">
 					</li>
@@ -238,7 +238,7 @@ switch ($tela):
 									<td class="center">
 										<div>
 											<a href="?m=lojas&t=incluir&id=%s" title="Novo cadastro"><img src="img/plus.png" alt="Novo cadastro" /></a>
-											<a href="?m=veiculos_loja&t=incluir&user_id='.$resp->dono_id.'" title="Novo carro na loja"><img src="img/car.png" alt="Novo carro na loja" /></a>
+											<a href="?m=veiculos&t=incluir&dono_id='.$resp->dono_id.'&q=loja" title="Novo carro na loja"><img src="img/car.png" alt="Novo carro na loja" /></a>
 											<a href="?m=lojas&t=editar&id=%s" title="Editar"><img src="img/edit.png" alt="Editar" /></a> 
 											<a href="?m=lojas&t=excluir&id=%s" title="Excluir"><img src="img/cancel.png" alt="Excluir" /></a>
 										</div>
@@ -280,6 +280,7 @@ switch ($tela):
 							"dono_id"		=> $dono_id,
 							"nome" 			=> $_POST['nome'],
 							"bairro"		=> $_POST['bairro'],
+							"rua"			=> $_POST['rua'],
 							"numero"		=> $_POST['numero'],
 							"cep"			=> $_POST['cep'],
 							"CNPJ"			=> $_POST['CNPJ'],
@@ -288,6 +289,8 @@ switch ($tela):
 							"telefone_res"	=> $_POST['telefone_res'],
 							"telefone_cel"	=> $_POST['telefone_cel'],
 							"email"			=> $_POST['email'],
+							"google_map"	=> $_POST['google_map'],
+							"google_link"	=> $_POST['google_link'],
 							"logo"			=> preparar_nome($_FILES['logo']),
 							"loja_foto"		=> preparar_nome($_FILES['loja_foto']),
 						));
@@ -300,12 +303,6 @@ switch ($tela):
 						if($resp->nome != $_POST['nome']):
 							if($loja_bd->lojaJaExiste('nome',$_POST['nome'])):
 								printMsg('Esta loja ja existe no sistema, escolha outro nome para sua loja.','erro');
-								$duplicado = TRUE;
-							endif;
-						endif;
-						if($resp->CNPJ != $_POST['CNPJ']):
-							if($loja_bd->lojaJaExiste('CNPJ',$_POST['CNPJ'])):
-								printMsg('Este CNPJ ja existe no sistema, escolha outro CNPJ.','erro');
 								$duplicado = TRUE;
 							endif;
 						endif;
@@ -362,15 +359,10 @@ switch ($tela):
 						rules:{
 							loja_nome:{required:true},
 							nome:{required:true},
-							bairro:{required:true},
 							numero:{required:true},
-							cep:{required:true},
-							CNPJ:{required:true},
 							cidade:{required:true},
 							estados:{required:true},
 							telefone_res:{required:true,rangelength:[6,14]},
-							telefone_cel:{required:true,rangelength:[6,14]},
-							email:{required:true, email:true},
 							logo:{required:true},
 							loja_foto:{required:true}
 						}
@@ -408,6 +400,8 @@ switch ($tela):
 					</li>
 					<li><label for="bairro">Bairro:</label> <input type="text" size="50" name="bairro" value="<?php if($loja_resp) echo $loja_resp->bairro ?>">
 					</li>
+					<li><label for="rua">Rua:</label> <input type="text" size="50" name="rua" value="<?php if($loja_resp) echo $loja_resp->rua ?>">
+					</li>
 					<li><label for="numero">Número:</label> <input type="text" size="50" name="numero" value="<?php if($loja_resp) echo $loja_resp->numero ?>">
 					</li>
 					<li><label for="cep">Cep:</label> <input type="text" size="25" name="cep" value="<?php if($loja_resp) echo $loja_resp->cep ?>">
@@ -443,11 +437,16 @@ switch ($tela):
 							<OPTION VALUE="SP">SP</OPTION>
 							<OPTION VALUE="TO">TO</OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php if($loja_resp) echo $loja_resp->telefone_res ?>">
+					<li><label for="telefone_res">Telefone 1:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php if($loja_resp) echo $loja_resp->telefone_res ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php if($loja_resp) echo $loja_resp->telefone_cel ?>">
+					<li><label for="telefone_cel">Telefone 2:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php if($loja_resp) echo $loja_resp->telefone_cel ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" value="<?php if($loja_resp) echo $loja_resp->email ?>">
+					</li>
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" value="<?php if($loja_resp) echo $loja_resp->google_link ?>">
+					</li>
+					<li>
+					<label for="google_map">Google map:</label> <textarea name="google_map" cols="20" rows="5"><?php if($loja_resp) echo $loja_resp->google_map ?></textarea>
 					</li>
 					<li><label for="logo">Logomarca:</label> <input type="file" size="25" name="logo" value="<?php if($loja_resp) echo $loja_resp->logo ?>">
 					</li>
@@ -519,27 +518,6 @@ switch ($tela):
 				printMsg('Loja não definido, <a href="m=lojas&t=listar">Escolha uma loja para deletar</a>','erro');
 			endif;
 	?>
-	<script type="text/javascript">
-				$(document).ready(function(){
-					$(".userForm").validate({
-						rules:{
-							loja_nome:{required:true},
-							nome:{required:true},
-							bairro:{required:true},
-							numero:{required:true},
-							cep:{required:true},
-							CNPJ:{required:true},
-							cidade:{required:true},
-							estados:{required:true},
-							telefone_res:{required:true,rangelength:[8,10]},
-							telefone_cel:{required:true,rangelength:[8,10]},
-							email:{required:true, email:true},
-							logo:{required:true},
-							loja_foto:{required:true}
-						}
-					});
-				});
-			</script>
 			<form class="userForm" method="post" action="">
 				<fieldset><legend>Excluir loja.</legend>
 				<ul>
@@ -557,6 +535,8 @@ switch ($tela):
 					<li><label for="nome">Nome:</label> <input type="text" size="50" name="nome" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->nome ?>">
 					</li>
 					<li><label for="bairro">Bairro:</label> <input type="text" size="50" name="bairro" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->bairro ?>">
+					</li>
+					<li><label for="rua">Rua:</label> <input type="text" size="50" name="rua" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->rua ?>">
 					</li>
 					<li><label for="numero">Número:</label> <input type="text" size="50" name="numero" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->numero ?>">
 					</li>
@@ -593,11 +573,13 @@ switch ($tela):
 							<OPTION VALUE="SP">SP</OPTION>
 							<OPTION VALUE="TO">TO</OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->telefone_res ?>">
+					<li><label for="telefone_res">Telefone 1:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->telefone_res ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->telefone_cel ?>">
+					<li><label for="telefone_cel">Telefone 2:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->telefone_cel ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->email ?>">
+					</li>
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" disabled="disabled" value="<?php if($loja_resp) echo $loja_resp->google_link ?>">
 					</li>
 					<li class="center"><input type="button"
 						onclick="location.href='?m=lojas&t=listar'" value="Cancelar" /> <input

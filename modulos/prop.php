@@ -24,8 +24,10 @@ switch ($tela):
 				"cep"			=> $_POST['cep'],
 				"cidade"		=> $_POST['cidade'],
 				"estado"		=> $_POST['estados'],
-				"telefone_res"	=> $_POST['telefone_res'],
-				"telefone_cel"	=> $_POST['telefone_cel'],
+				"telefone1"		=> $_POST['telefone1'],
+				"telefone2"		=> $_POST['telefone2'],
+				"telefone3"		=> $_POST['telefone3'],
+				"telefone4"		=> $_POST['telefone4'],
 				"email"			=> $_POST['email'],
 				"descricao"		=> $_POST['descricao'],
 				"img_1"			=> preparar_nome($_FILES['img_1']),
@@ -33,16 +35,17 @@ switch ($tela):
 				"img_3"			=> preparar_nome($_FILES['img_3']),
 				"img_4"			=> preparar_nome($_FILES['img_4']),
 	"propaganda_completa"		=> ($_POST['completa']=='on') ? 's' : 'n',
-				
+				"google_map"	=> $_POST['google_map'],
+				"google_link"	=> $_POST['google_link'],
 			));
 			$propaganda->inserir($propaganda);
 			if($propaganda->getValor('nome')):
 				criar_diretorio_propagandas($propaganda->getValor('nome'));
-				upload_mestre($propaganda->getValor('nome'),$_FILES['logo'],$propaganda->getValor('nome'),$propaganda->getValor('logo'),'propagandas',200);
-				upload_mestre($propaganda->getValor('nome'),$_FILES['img_1'],$propaganda->getValor('nome'),$propaganda->getValor('img_1'),'propagandas',500);
-				upload_mestre($propaganda->getValor('nome'),$_FILES['img_2'],$propaganda->getValor('nome'),$propaganda->getValor('img_2'),'propagandas',500);
-				upload_mestre($propaganda->getValor('nome'),$_FILES['img_3'],$propaganda->getValor('nome'),$propaganda->getValor('img_3'),'propagandas',500);
-				upload_mestre($propaganda->getValor('nome'),$_FILES['img_4'],$propaganda->getValor('nome'),$propaganda->getValor('img_4'),'propagandas',500);
+				upload_mestre($propaganda->getValor('nome'),$_FILES['logo'],$propaganda->getValor('nome'),$propaganda->getValor('logo'),'img_propagandas',200);
+				upload_mestre($propaganda->getValor('nome'),$_FILES['img_1'],$propaganda->getValor('nome'),$propaganda->getValor('img_1'),'img_propagandas',500);
+				upload_mestre($propaganda->getValor('nome'),$_FILES['img_2'],$propaganda->getValor('nome'),$propaganda->getValor('img_2'),'img_propagandas',500);
+				upload_mestre($propaganda->getValor('nome'),$_FILES['img_3'],$propaganda->getValor('nome'),$propaganda->getValor('img_3'),'img_propagandas',500);
+				upload_mestre($propaganda->getValor('nome'),$_FILES['img_4'],$propaganda->getValor('nome'),$propaganda->getValor('img_4'),'img_propagandas',500);
 				
 			else:
 				printMsg('Pasta não pode ser criada, pois o nome não foi definido','erro');
@@ -84,13 +87,13 @@ switch ($tela):
 							$usuarios->seleciona_tudo($usuarios);
 							$usu = $usuarios->retorna_dados();
 					?>
-						<li><label for="loja_nome">Dono da propaganda:</label> <select name="loja_nome" autofocus="autofocus">
+						<li><label for="prop_nome">Dono da propaganda:</label> <select name="prop_nome" autofocus="autofocus">
 							<option><?php echo $usu->nome; ?></option>
 						</select></li>
 					<?php 				
 						else:
 					?>
-						<li><label for="loja_nome">Dono da propaganda:</label> <select name="prop_nome" autofocus="autofocus">
+						<li><label for="prop_nome">Dono da propaganda:</label> <select name="prop_nome" autofocus="autofocus">
 							<option></option>
 					<?php 
 							$usuarios->retornarPropagandas();
@@ -116,7 +119,7 @@ switch ($tela):
 							<option value="ferrovelho">Táxi</option>
 							<option value="variado">variado</option>
 							</select></li>
-					<li><label for="beirro">Bairro:</label> <input type="text" size="50" name="bairro" value="<?php echo $_POST['bairro']='' ?>">
+					<li><label for="bairro">Bairro:</label> <input type="text" size="50" name="bairro" value="<?php echo $_POST['bairro']='' ?>">
 					</li>
 					<li><label for="numero">Número:</label> <input type="text" size="50" name="numero" value="<?php echo $_POST['numero']='' ?>">
 					</li>
@@ -153,9 +156,13 @@ switch ($tela):
 							<OPTION VALUE="SP">SP</OPTION>
 							<OPTION VALUE="TO">TO</OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php echo $_POST['telefone_res']='' ?>">
+					<li><label for="telefone1">Telefone 1:</label> <input type="text" id="telefone1" size="25" name="telefone1" value="<?php echo $_POST['telefone1']='' ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php echo $_POST['telefone_cel']='' ?>">
+					<li><label for="telefone2">Telefone 2:</label> <input type="text" id="telefone2" size="25" name="telefone2" value="<?php echo $_POST['telefone2']='' ?>">
+					</li>
+					<li><label for="telefone3">Telefone 3:</label> <input type="text" id="telefone3" size="25" name="telefone3" value="<?php echo $_POST['telefone3']='' ?>">
+					</li>
+					<li><label for="telefone4">Telefone 4:</label> <input type="text" id="telefone4" size="25" name="telefone4" value="<?php echo $_POST['telefone4']='' ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" value="<?php echo $_POST['email']='' ?>">
 					</li>
@@ -170,12 +177,18 @@ switch ($tela):
 					<li><label for="completa">Propaganda completa?</label> <input type="checkbox" name="completa" >
 					</li>
 					<br />
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" value="<?php echo $_POST['google_link']='' ?>">
+					</li>
+					<li>
+					<label for="google_map">Google map:</label> <textarea name="google_map" cols="20" rows="5"></textarea>
+					</li>
+					
 					<li>Descricao:
 					<label for="descricao"></label> <textarea name="descricao" class="ckeditor" id="editor1" cols="20" rows="5"></textarea>
 					</li>
-					<li class="center"><input type="button"
-						onclick="location.href='?m=prop&t=listar'" value="Cancelar" /> <input
-						type="submit" name="cadastrar" value="Salvar dados" /></li>
+					<li class="center">
+					<input type="button" onclick="location.href='?m=prop&t=listar'" value="Cancelar" /> 
+					<input type="submit" name="cadastrar" value="Salvar dados" /></li>
 				</ul>
 				</fieldset>
 			</form>
@@ -215,7 +228,7 @@ switch ($tela):
 				    <th>Celular</th>
 				    <th>Residencial</th>
 				    <th>Email</th>
-				    <th>Completa</th>
+				    <th>Compl.</th>
 				    <th>Ações</th>
 				  </tr>
 				  </thead>
@@ -235,8 +248,8 @@ switch ($tela):
 								printf('<td class="center">%s</td>',$resp->tipo);
 								printf('<td class="center">%s</td>',$resp->cidade);
 								printf('<td class="center">%s</td>',$resp->estado);
-								printf('<td class="center">%s</td>',$resp->telefone_cel);
-								printf('<td class="center">%s</td>',$resp->telefone_res);
+								printf('<td class="center">%s</td>',$resp->telefone1);
+								printf('<td class="center">%s</td>',$resp->telefone2);
 								printf('<td class="center">%s</td>',$resp->email);
 								printf('<td class="center">%s</td>',$resp->propaganda_completa);
 								printf('
@@ -265,8 +278,9 @@ switch ($tela):
 			if(isAdmin() == TRUE || $sessao->getVar('id_user') == $_GET['id']):
 				if(isset($_GET['id'])):
 					$id = $_GET['id'];
+					$prop_nome = $_POST['prop_nome'];
 					$p = new usuarioDonoPropaganda(array(
-						"nome" 			=> $_POST['prop_nome']
+						"nome" 			=> $prop_nome
 						));
 					$p->retornarPropIndice($p->getValor('nome'));
 					$resp = $p->retorna_dados();	
@@ -281,8 +295,10 @@ switch ($tela):
 							"cep"			=> $_POST['cep'],
 							"cidade"		=> $_POST['cidade'],
 							"estado"		=> $_POST['estados'],
-							"telefone_res"	=> $_POST['telefone_res'],
-							"telefone_cel"	=> $_POST['telefone_cel'],
+							"telefone1"		=> $_POST['telefone1'],
+							"telefone2"		=> $_POST['telefone2'],
+							"telefone3"		=> $_POST['telefone3'],
+							"telefone4"		=> $_POST['telefone4'],
 							"email"			=> $_POST['email'],
 							"descricao"		=> $_POST['descricao'],
 							"img_1"			=> preparar_nome($_FILES['img_1']),
@@ -290,7 +306,8 @@ switch ($tela):
 							"img_3"			=> preparar_nome($_FILES['img_3']),
 							"img_4"			=> preparar_nome($_FILES['img_4']),
 				"propaganda_completa"		=> ($_POST['completa']=='on') ? 's' : 'n',
-							
+							"google_map"	=> $_POST['google_map'],
+							"google_link"	=> $_POST['google_link'],
 						));
 						$propaganda_bd->valor_pk = $id;
 						$propaganda_bd->extras_select =  " WHERE id=$id";
@@ -324,11 +341,11 @@ switch ($tela):
 							$dir = 'img_propagandas/'.$B_NOME;
 							apaga_diretorio($dir);
 							criar_diretorio_propagandas($propaganda_bd->getValor('nome'));
-							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['logo'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('logo'),'propagandas',200);
-							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_1'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_1'),'propagandas',500);
-							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_2'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_2'),'propagandas',500);
-							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_3'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_3'),'propagandas',500);
-							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_4'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_4'),'propagandas',500);
+							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['logo'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('logo'),'img_propagandas',200);
+							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_1'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_1'),'img_propagandas',500);
+							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_2'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_2'),'img_propagandas',500);
+							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_3'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_3'),'img_propagandas',500);
+							upload_mestre($propaganda_bd->getValor('nome'),$_FILES['img_4'],$propaganda_bd->getValor('nome'),$propaganda_bd->getValor('img_4'),'img_propagandas',500);
 						else:
 							printMsg('Ocorreu um erro no caminho da pasta especificada','erro');		
 						endif;							
@@ -433,9 +450,13 @@ switch ($tela):
 							<OPTION VALUE="SP">SP</OPTION>
 							<OPTION VALUE="TO">TO</OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone_res ?>">
+					<li><label for="telefone1">Telefone 1:</label> <input type="text" id="telefone1" size="25" name="telefone1" value="<?php echo $_POST['telefone1']='' ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone_cel ?>">
+					<li><label for="telefone2">Telefone 2:</label> <input type="text" id="telefone2" size="25" name="telefone2" value="<?php echo $_POST['telefone2']='' ?>">
+					</li>
+					<li><label for="telefone3">Telefone 3:</label> <input type="text" id="telefone3" size="25" name="telefone3" value="<?php echo $_POST['telefone3']='' ?>">
+					</li>
+					<li><label for="telefone4">Telefone 4:</label> <input type="text" id="telefone4" size="25" name="telefone4" value="<?php echo $_POST['telefone4']='' ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" value="<?php if($propaganda_resp) echo $propaganda_resp->email ?>">
 					</li>
@@ -450,6 +471,11 @@ switch ($tela):
 					<li><label for="completa">Propaganda completa?</label> <input type="checkbox" name="completa" >
 					</li>
 					<br />
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" value="<?php if($propaganda_resp) echo $propaganda_resp->google_link ?>">
+					</li>
+					<li>
+					<label for="google_map">Google map:</label> <textarea name="google_map" cols="20" rows="5"><?php if($propaganda_resp) echo $propaganda_resp->google_map ?></textarea>
+					</li>
 					<li>Descricao:
 					<label for="descricao"></label> <textarea name="descricao" class="ckeditor" id="editor1" cols="20" rows="5"><?php if($propaganda_resp) echo $propaganda_resp->descricao ?></textarea>
 					</li>
@@ -543,15 +569,21 @@ switch ($tela):
 					<li><label for="tipo">Estado:</label> <select name="estados" disabled="disabled">
 							<OPTION VALUE="RJ"><?php if($propaganda_resp) echo $propaganda_resp->estado ?></OPTION>
 							</SELECT></li>
-					<li><label for="telefone_res">Tel Residencial:</label> <input type="text" id="telefone_res" size="25" name="telefone_res" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone_res ?>">
+					<li><label for="telefone1">Telefone 1:</label> <input type="text" id="telefone1" size="25" name="telefone1" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone1 ?>">
 					</li>
-					<li><label for="telefone_cel">Tel Celular:</label> <input type="text" id="telefone_cel" size="25" name="telefone_cel" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone_cel ?>">
+					<li><label for="telefone2">Telefone 2:</label> <input type="text" id="telefone2" size="25" name="telefone2" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone2 ?>">
+					</li>
+					<li><label for="telefone3">Telefone 3:</label> <input type="text" id="telefone3" size="25" name="telefone3" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone3 ?>">
+					</li>
+					<li><label for="telefone4">Telefone 4:</label> <input type="text" id="telefone4" size="25" name="telefone4" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->telefone4 ?>">
 					</li>
 					<li><label for="email">Email:</label> <input type="text" id="email" size="25" name="email" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->email ?>">
 					</li>
 					<li><label for="completa">Propaganda completa?</label> <input type="checkbox" name="completa" <?php if($propaganda_resp && $propaganda_resp->propaganda_completa == 's') echo 'checked="checked"'; ?>disabled="disabled" >
 					</li>
 					<br />
+					<li><label for="google_link">Google link:</label> <input type="text" id="google_link" size="25" name="google_link" disabled="disabled" value="<?php if($propaganda_resp) echo $propaganda_resp->google_link ?>">
+					</li>
 					<li><label for="descricao">Descricao:</label> <textarea name="descricao" disabled="disabled" id="descricao" cols="20" rows="5"><?php if($propaganda_resp) echo $propaganda_resp->descricao ?></textarea>
 					</li>
 					<li class="center"><input type="button"

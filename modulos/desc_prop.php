@@ -2,7 +2,7 @@
 
 require_once(dirname(dirname(__FILE__))."/funcoes.php");
 $prop = new objPropagandas();
-$prop->extras_select = " WHERE id=".$_GET['id'];
+$prop->extras_select = " WHERE id=".antiInject($_GET['id']);
 $prop->seleciona_tudo($prop);
 $prop_resp = $prop->retorna_dados();
 ?>
@@ -37,10 +37,31 @@ $prop_resp = $prop->retorna_dados();
 	</div>
 </div>
 
-<div class="v_desc radius5" align="center">
-<div class="fb-facepile" data-href="http://127.0.0.1/01/karfacil/" data-max-rows="1" data-width="300"></div>
+<div class="v_desc radius5" align="left">
+<div class="fb-like" data-href="http://karfacil.com" data-width="550" data-show-faces="true" data-send="true"></div>
 </div>
 
 <div class="v_desc radius5" align="center"> 
+<?php 
+if($prop_resp->google_map):
+	$google_resp = 'Nos encontre aqui !';
+else:
+	$google_resp = '';
+endif;		
+?>
+<p class="fonte"><?php echo $google_resp ?></p>
+<?php echo $prop_resp->google_map ?>
+</div>
+
+<div class="v_desc radius5" align="center">
+	<hr /> 
 	<p class="fonte"><?php exibirProp($prop_resp) ?></p>
 </div>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

@@ -30,8 +30,8 @@ require_once(dirname(dirname(__FILE__))."/funcoes.php");
 // echo basename(__FILE__); retorna o nome do arquivo
 
 if(isset($_GET['busca']) && $_GET['busca'] == TRUE):
-	$nome = $_POST['buscar'];
-	$tipo = $_POST['tipo'];
+	$nome = antiInject($_POST['buscar']);
+	$tipo = antiInject($_POST['tipo']);
 	$propagandas_busca = new objPropagandas();
 	$propagandas_busca->extras_select = " WHERE nome LIKE '%$nome%'";
 	

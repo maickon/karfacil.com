@@ -10,61 +10,57 @@
 			</ul>
 	</form>
 </div>
-
+<?php //require_once 'modulos/paginacao_conf.php';?>
 <?php if(isset($_GET['busca']) && $_GET['busca'] == TRUE):?>
 	
 	<?php 
-	$v_usuario_busca = new objVeiculosUsu();
-	$nome = $_POST['buscar'];
-	$v_usuario_busca->extras_select = "WHERE categoria='".$_GET['categoria']."' AND nome LIKE '%$nome%'";
-	$v_usuario_busca->seleciona_tudo($v_usuario_busca);
+	$v_busca = new objVeiculos();
+	$nome = antiInject($_POST['buscar']);
+	$v_busca->extras_select = "WHERE categoria='".antiInject($_GET['categoria'])."' AND nome LIKE '%$nome%'";
+	$v_busca->seleciona_tudo($v_busca);
+	
+	$sql_conta = $v_busca->seleciona_tudo($v_busca);
+	$quantreg = mysql_num_rows($sql_conta);
+	
+	//include 'modulos/paginacao.php';
 	?>
 	<div align="center">
 		<p><?php echo "Resultado da pesquisa por <u>$nome</u>";?></p>
 	</div>
 	<div class="vitrine" align="center">
 		<?php 
-				while($respv_usuario_busca = $v_usuario_busca->retorna_dados()): 
+			while($respv_busca = $v_busca->retorna_dados()): 
+				
 				$dono_usu_busca = new usuarioDeVendaCarro();
-				$dono_usu_busca->retornarTudoUsuario($respv_usuario_busca->dono_id);
-				$resp_dono_usu_busca = $dono_usu_busca->retorna_dados();
+				$dono_usu_busca->retornarTudoUsuario($respv_busca->dono_id);
+				$resp_dono_busca = $dono_usu_busca->retorna_dados();
+				
+				
+				$loja = new objLojas();
+				$loja->retornarTudoLoja($respv_busca->dono_id);
+          		$loja_dados = $loja->retorna_dados();
 		?>
 		<div class="imagem">
 		     <div class="bg_imagem">
-		       <a href="?desc_vu=true&id=<?php echo $respv_usuario_busca->id ?>&d_nome=<?php echo $resp_dono_usu_busca->nome ?>&d_id=<?php echo $resp_dono_usu_busca->id?>">
-		          <img src="<?php echo IMGLOJASPATH.'exclusivos/'.$respv_usuario_busca->img_1.'/'.$respv_usuario_busca->img_1?>" alt="<?php echo $respv_usuario_busca->nome ?>" width="235" height="150" /></a>
+		     <?php if($respv_busca->pertencente == 'loja'):?>
+		     			<a href="?desc_vl=true&id=<?php echo $respv_busca->id ?>&d_nome=<?php echo $loja_dados->nome ?>&d_id=<?php echo $loja_dados->id?>">
+		       				<img src="<?php echo IMGLOJASPATH.$loja_dados->nome.'/'.$respv_busca->img_1.'/'.$respv_busca->img_1?>" alt="<?php echo $respv_busca->nome ?>" width="235" height="150" />
+		       			</a> 	      		     			
+		     <?php elseif($respv_busca->pertencente == 'exclusivo'):?>		     	
+		       			<a href="?desc_ve=true&id=<?php echo $respv_busca->id ?>&d_nome=<?php echo $resp_dono_busca->nome ?>&d_id=<?php echo $resp_dono_busca->id?>">
+		          			<img src="<?php echo IMGLOJASPATH.'exclusivos/'.$respv_busca->img_1.'/'.$respv_busca->img_1?>" alt="<?php echo $respv_busca->nome ?>" width="235" height="150" />
+		          		</a>
+		     <?php endif;?>
 		     </div>
 		      <div class="legenda_todo">
-		          <div class="legenda"><?php echo $respv_usuario_busca->nome ?> </div>
-		          <div class="legenda"><?php echo $respv_usuario_busca->preco ?></div>
-		          <div class="legenda"><?php echo $respv_usuario_busca->ano ?></div>
+		          <div class="legenda"><?php echo $respv_busca->nome ?> </div>
+		          <div class="legenda">R$ <?php echo $respv_busca->preco ?></div>
+		          <div class="legenda"><?php echo $respv_busca->ano ?></div>
 		      </div>  
 	    </div>
 	    <?php endwhile;?> 
 	
-		<?php 
-		$loja_v_busca = new objVeiculosLoja();
-		$loja_v_busca->extras_select = "WHERE categoria='".$_GET['categoria']."' AND nome LIKE '%$nome%'";
-		$loja_v_busca->seleciona_tudo($loja_v_busca);
-	
-		while($lojav_resp_busca = $loja_v_busca->retorna_dados()):
-		$dono_veic_busca = new objLojas();
-		$dono_veic_busca->retornarTudoLoja($lojav_resp_busca->loja_id);
-		$resp_dono_veic_busca = $dono_veic_busca->retorna_dados();
-		?>
-		<div class="imagem">
-	     <div class="bg_imagem">
-	       <a href="?desc_v=true&id=<?php echo $lojav_resp_busca->id ?>&l_nome=<?php echo $resp_dono_veic_busca->nome ?>&l_id=<?php echo $resp_dono_veic_busca->id ?>&l_logo=<?php echo $resp_dono_veic_busca->logo ?>">
-	          <img src="<?php echo IMGLOJASPATH.$resp_dono_veic_busca->nome.'/'.$lojav_resp_busca->img_1.'/'.$lojav_resp_busca->img_1?>" alt="<?php echo $lojav_resp_busca->nome ?>" width="235" height="150" /></a>
-	     </div>
-	      <div class="legenda_todo">
-	          <div class="legenda"><?php echo $lojav_resp_busca->nome ?> </div>
-	          <div class="legenda"><?php echo $lojav_resp_busca->preco ?></div>
-	          <div class="legenda"><?php echo $lojav_resp_busca->ano ?></div>
-	      </div>   
-	    </div>
-	<?php endwhile;?> 
-	<?php if(($v_usuario_busca->linhas_afetadas == 0) and ($loja_v_busca->linhas_afetadas == 0)):?>
+	<?php if(($v_busca->linhas_afetadas == 0)):?>
 		<div class="v_desc" align="center">
 			<p class="erro">Este veículo não consta em nosso banco de dados!</p>
 		</div>	
@@ -77,56 +73,58 @@
 	</div>
 	
 	<?php 
-	$v_usuario = new objVeiculosUsu();
-	$v_usuario->extras_select = "WHERE categoria='".$_GET['categoria']."' ORDER BY rand()";
-	$v_usuario->seleciona_tudo($v_usuario);
+	$veiculo = new objVeiculos();
+	$veiculo->extras_select = "WHERE categoria='".antiInject($_GET['categoria'])."' ORDER BY rand() ";
+	$veiculo->seleciona_tudo($veiculo);
+	
+	$sql_conta = $veiculo->seleciona_tudo($veiculo);
+	$quantreg = mysql_num_rows($sql_conta);
+	
+	//include 'modulos/paginacao.php';
 	?>
 	<div class="vitrine" align="center">
 		<?php 
-				while($respv_usuario = $v_usuario->retorna_dados()): 
-				$dono_usu = new usuarioDeVendaCarro();
-				$dono_usu->retornarTudoUsuario($respv_usuario->dono_id);
-				$resp_dono_usu = $dono_usu->retorna_dados();
+			while($resp_v = $veiculo->retorna_dados()): 
+				
+				$dono = new usuarioDeVendaCarro();
+				$dono->retornarTudoUsuario($resp_v->dono_id);
+				$resp_dono = $dono->retorna_dados();
+				
+				$loja = new objLojas();
+				$loja->retornarTudoLoja($resp_v->dono_id);
+          		$loja_dados = $loja->retorna_dados();
+				
 		?>
 		<div class="imagem">
 		     <div class="bg_imagem">
-		       <a href="?desc_vu=true&id=<?php echo $respv_usuario->id ?>&d_nome=<?php echo $resp_dono_usu->nome ?>&d_id=<?php echo $resp_dono_usu->id?>">
-		          <img src="<?php echo IMGLOJASPATH.'exclusivos/'.$respv_usuario->img_1.'/'.$respv_usuario->img_1?>" alt="<?php echo $respv_usuario->nome ?>" width="235" height="150" /></a>
-		     </div>
+		     <?php if($resp_v->pertencente == 'loja'):?>
+		     			<a href="?desc_vl=true&id=<?php echo $resp_v->id ?>&d_nome=<?php echo $loja_dados->nome ?>&d_id=<?php echo $loja_dados->id?>">
+		       			<img src="<?php echo IMGLOJASPATH.$loja_dados->nome.'/'.$resp_v->img_1.'/'.$resp_v->img_1?>" alt="<?php echo $resp_v->nome ?>" width="235" height="150" /></a> 	      
+		     			
+		     <?php elseif($resp_v->pertencente == 'exclusivo'):?>
+		     			<a href="?desc_ve=true&id=<?php echo $resp_v->id ?>&d_nome=<?php echo $resp_dono->nome ?>&d_id=<?php echo $resp_dono->id?>">
+		       			<img src="<?php echo IMGLOJASPATH.'exclusivos/'.$resp_v->img_1.'/'.$resp_v->img_1?>" alt="<?php echo $resp_v->nome ?>" width="235" height="150" /></a> 	      
+		     			
+		     <?php endif;?>
+		      </div>
 		      <div class="legenda_todo">
-		          <div class="legenda"><?php echo $respv_usuario->nome ?> </div>
-		          <div class="legenda"><?php echo $respv_usuario->preco ?></div>
-		          <div class="legenda"><?php echo $respv_usuario->ano ?></div>
+		          <div class="legenda"><?php echo $resp_v->nome ?> </div>
+		          <div class="legenda">R$ <?php echo $resp_v->preco ?></div>
+		          <div class="legenda"><?php echo $resp_v->ano ?></div>
 		      </div>  
 	    </div>
 	    <?php endwhile;?> 
-	
-		<?php 
-		$loja_v = new objVeiculosLoja();
-		$loja_v->extras_select = "WHERE categoria='".$_GET['categoria']."' ORDER BY rand()";
-		$loja_v->seleciona_tudo($loja_v);
-	
-		while($lojav_resp = $loja_v->retorna_dados()):
-		$dono_veic = new objLojas();
-		$dono_veic->retornarTudoLoja($lojav_resp->loja_id);
-		$resp_dono_veic = $dono_veic->retorna_dados();
-		?>
-		<div class="imagem">
-	     <div class="bg_imagem">
-	       <a href="?desc_v=true&id=<?php echo $lojav_resp->id ?>&l_nome=<?php echo $resp_dono_veic->nome ?>&l_id=<?php echo $resp_dono_veic->id ?>&l_logo=<?php echo $resp_dono_veic->logo ?>">
-	          <img src="<?php echo IMGLOJASPATH.$resp_dono_veic->nome.'/'.$lojav_resp->img_1.'/'.$lojav_resp->img_1?>" alt="<?php echo $lojav_resp->nome ?>" width="235" height="150" /></a>
-	     </div>
-	      <div class="legenda_todo">
-	          <div class="legenda"><?php echo $lojav_resp->nome ?> </div>
-	          <div class="legenda"><?php echo $lojav_resp->preco ?></div>
-	          <div class="legenda"><?php echo $lojav_resp->ano ?></div>
-	      </div>   
-	    </div>
-	  <?php endwhile;?> 
 	<?php 
-	if(($v_usuario->linhas_afetadas == 0) and ($loja_v->linhas_afetadas == 0)):
+	if(($veiculo->linhas_afetadas == 0)):
 		echo '<div class="aviso">Por enquanto não ha registros da categoria '.$_GET['categoria'].' cadastrado em nosso sistema</div>';
 	endif;	
 	?>
 <?php endif;?>
-</div>    
+</div> 
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />   

@@ -119,11 +119,17 @@ function isAdmin(){
 
 function exibirVeiculo($objeto){
 	(!empty($objeto->nome)) ? $nome = $objeto->nome.' ' : $nome=' ';
-	(!empty($objeto->estado)) ? ' '.$estado = $objeto->estado : $estado=' ';
-	(!empty($objeto->preco)) ? $preco = '  custa R$ '.$objeto->preco : $preco = ' ';
+	(!empty($objeto->estado)) ? ' ,em estado '.$estado = $objeto->estado : $estado=' ';
+	if($objeto->preco == 'a combinar'):
+		$preco = 'preço '.$objeto->preco;
+	elseif($objeto->preco && $objeto->preco != 'a combinar'):
+		$preco = '  custa R$ '.$objeto->preco;
+	else:
+		$preco = ' ';
+	endif;	
 	(!empty($objeto->cor)) ? $cor = '  sua cor é '.$objeto->cor : $cor = ' ';
 	(!empty($objeto->cilindrada)) ? $cilindrada = ' '.$objeto->cilindrada.' cilindrada' : $cilindrada = ' ';
-	(!empty($objeto->cambio)) ? $cambio = '  '.$objeto->cambio : $cambio = ' ';
+	(!empty($objeto->cambio)) ? $cambio = ' Câmbio '.$objeto->cambio : $cambio = ' ';
 	(!empty($objeto->direcao)) ? $direcao = ' com direção '.$objeto->direcao : $direcao = ' ';
 	(!empty($objeto->transmissao)) ? $transmissao = '  tramsmissão '.$objeto->transmissao : $transmissao = ' ';
 	(!empty($objeto->combustivel)) ? $combustivel = ' e combustivel '.$objeto->combustivel.' ' : $combustivel = ' ';
@@ -137,17 +143,17 @@ function exibirVeiculo($objeto){
 	if($objeto == NULL):
 		printMsg('Seu veículo não foi definido.','erro');
 	else:
-		echo 'Este veículo pertence a loja ' .$_GET['l_nome'].'<br />'.
-		$nome.$estado.$preco.$cor.$cilindrada.$cambio.$direcao.$transmissao.$combustivel.$portas.$kilometragem.$marca.$modelo.$versao.$ano.$descricao;
+		echo 'Este veículo pertence a loja ' .$_GET['d_nome'].'<br />'.
+		$nome.$estado.' '.$preco.$cor.$cilindrada.$cambio.$direcao.$transmissao.$combustivel.$portas.$kilometragem.$marca.$modelo.$versao.$ano.$descricao;
 	endif;
 }
 
 function exibirVeiculoUsu($objeto){
 	(!empty($objeto->nome)) ? $nome = $objeto->nome.' ' : $nome=' ';
-	(!empty($objeto->estado)) ? ' '.$estado = $objeto->estado : $estado=' ';
-	(!empty($objeto->preco)) ? $preco = '  custa R$ '.$objeto->preco : $preco = ' ';
+	(!empty($objeto->estado)) ? ' ,em estado '.$estado = $objeto->estado : $estado=' ';
+	(!empty($objeto->preco)) ? $preco = '  custa '.$objeto->preco.' R$' : $preco = ' ';
 	(!empty($objeto->cor)) ? $cor = '  sua cor é '.$objeto->cor : $cor = ' ';
-	(!empty($objeto->cilindrada)) ? $cilindrada = ' '.$objeto->cilindrada.' cilindrada' : $cilindrada = ' ';
+	(!empty($objeto->cilindrada)) ? $cilindrada = ' '.$objeto->cilindrada.' cilindradas' : $cilindrada = ' ';
 	(!empty($objeto->cambio)) ? $cambio = ' câmbio '.$objeto->cambio : $cambio = ' ';
 	(!empty($objeto->direcao)) ? $direcao = ' com direção '.$objeto->direcao : $direcao = ' ';
 	(!empty($objeto->transmissao)) ? $transmissao = '  tramsmissão '.$objeto->transmissao : $transmissao = ' ';
@@ -167,6 +173,90 @@ function exibirVeiculoUsu($objeto){
 	endif;
 }
 
+function exibir_dados($objeto, $existe, $tipo){
+	if($tipo == 'exclusivo'):
+		if($existe == 0):
+			printMsg('Usuário inexistente neste sistema.','erro');
+		else:
+			isset($objeto->nome)? $nome = $objeto->nome : $nome = ''; 
+			if($objeto->telefone):
+				$telefone = ' hoje pelo telefone: '.$objeto->telefone;
+			else:
+				$telefone = '';
+			endif;	 
+			if($objeto->email):
+				$email = ' ou E-mail '.$objeto->email;
+			else:	
+				$email = ''; 
+			endif;
+				
+			echo '<p>Para mais detalhes do veículo entre em contato com '.$nome.$telefone.$email.'</p>
+			 <hr />';
+			 //<p class="aviso">Todas as informações presentes aqui são de inteira responsabilidade 
+			 //do usuário(a) '.$objeto->nome.' declarada por contrato.</p>	
+		endif;
+	elseif($tipo == 'loja'):
+		if($existe == 0):
+			printMsg('Usuário inexistente neste sistema.','erro');
+		else:
+			 isset($objeto->nome)? $nome = $objeto->nome : $nome = '';
+			 if($objeto->telefone_cel):
+			 	$telefone_cel = $objeto->telefone_cel;
+			 else:
+			 	$telefone_cel = ''; 
+			 endif;
+			 if($objeto->telefone_res):
+			 	$telefone_res = '/'.$objeto->telefone_res;
+			 else:
+			 	$telefone_res = '';
+			 endif;		
+			 if($objeto->email):
+			 	$email = ' ou E-mail '.$objeto->email;
+			 else:
+			 	$email = '';
+			 endif;		 
+			 if($objeto->cidade):
+			 	$cidade = ' Cidade '.$objeto->cidade;
+			 else:
+			 	$cidade = '';
+			 endif;	 
+			 if($objeto->bairro):
+			 	$bairro = ', '.$objeto->bairro;
+			 else:
+			 	$bairro = ''; 
+			 endif;
+			 if($objeto->rua):
+			 	$rua = ', '.$objeto->rua;
+			 else:
+			 	$rua = ''; 
+			 endif;
+			 if($objeto->numero):
+			 	$numero = ', número '.$objeto->numero;
+			 else:	
+			 	$numero = '';
+			 endif;	 
+			 if($objeto->cep):
+			 	$cep = ', cep '.$objeto->cep;
+			 else:
+			 	$cep = '';
+			 endif;
+			 if($objeto->estado):
+			 	$estado = ' e estado '.$objeto->estado;
+			 else:
+			 	$estado = '';
+			 endif;	  
+			 
+			 echo '<p>Para mais detalhes do veículo entre em contato hoje com a '.$nome.' pelo telefone: '
+			 .$telefone_cel.$telefone_res.'<br />'
+			 .$email.'</p>
+			 <p>Ou visite</p>
+			 <p>'.$cidade.$bairro.$rua.$numero.$cep.$estado.'</p>
+			 <hr />';
+			 //<p class="aviso">Todas as informações presentes aqui são de inteira responsabilidade 
+			 //de nossa loja filiada $loja_resp->nome declarada por contrato.</p>	
+		endif;;	
+	endif;	
+}
 function saudacoes($nome){
 	
 	$saudacoes = array(
@@ -212,30 +302,119 @@ function exibirProp($objeto){
 	if($objeto == NULL):
 		printMsg('Sua propaganda não foi definida.','erro');
 	else:
-		echo 'Situada em '.$objeto->cidade.', bairro '.$objeto->bairro.' Número '.$objeto->numero.
-			 ' Cep '.$objeto->cep.' Estado '.$objeto->estado.'<br />'.
-			 'Dados para contato: <br />'.
-			 ' Cel: '.$objeto->telefone_cel.'/'.$objeto->telefone_res.
-			 ' E-mail: '.$objeto->email.'<br />'.
-			 '<p class="compl">Sobre a '.$objeto->nome.'</p>'.
-			 $objeto->descricao;
+		if($objeto->cidade):
+			$cidade = 'Situada em '.$objeto->cidade.' ';
+		else:
+			$cidade = '';
+		endif;
+		if($objeto->bairro):
+			$bairro = ', bairro '.$objeto->bairro.' ';
+		else:
+			$bairro = '';
+		endif;	
+		if($objeto->numero):
+			$numero = ' Número '.$objeto->numero.' ';
+		else:
+			$numero = '';
+		endif;
+		if($objeto->cep):
+			$cep = ' Cep '.$objeto->cep.' ';	
+		else:
+			$cep = '';
+		endif;
+		if($objeto->estado):
+			$estado = ' Estado '.$objeto->estado.'<br />';	
+		else:
+			$estado = '';
+		endif;
+		if($objeto->telefone1):
+			 $telefone1 = 'Telefones: '.$objeto->telefone1.'/';
+		else:
+			$telefone1 = '';
+		endif;	
+		if($objeto->telefone2):
+			 $telefone2 = $objeto->telefone2.'/';
+		else:
+			$telefone2 = '';
+		endif;	
+		if($objeto->telefone3):
+			 $telefone3 = $objeto->telefone3.'/';
+		else:
+			$telefone3 = '';
+		endif;			 	
+		if($objeto->telefone4):
+			 $telefone4 = $objeto->telefone4;
+		else:
+			$telefone4 = '';
+		endif;
+		if($objeto->email):
+			$email = ' <br />E-mail: '.$objeto->email.'<br />';
+		else:
+			$email = '';
+		endif;	
+		if($objeto->descricao):
+			$descricao = '<p class="compl">Sobre a '.$objeto->nome.'</p>'.$objeto->descricao;
+		else:
+			$descricao = '';
+		endif;		
+		echo $cidade.$bairro.$numero.$cep.$estado.$telefone1.$telefone2.$telefone3.$telefone4.$email.$descricao;
 	endif;	
 }
 function exibirloja($objeto){
 	if($objeto == NULL):
 		printMsg('Sua loja não foi definida.','erro');
 	else:
-		(isset($objeto->cidade)) ? $cidade = ' Situada em  '.$objeto->cidade : $cidade = ' ';
-		(isset($objeto->bairro)) ? $bairro = ' ,bairro  '.$objeto->bairro : $bairro = ' ';
-		(isset($objeto->numero)) ? $numero = ' número  '.$objeto->numero : $numero = ' ';
-		(isset($objeto->cep)) ? $cep = ' Cep '.$objeto->cep.'<br />' : $cep = ' ';
-		(isset($objeto->estado)) ? $estado = ' Estado '.$objeto->estado.'<br />' : $estado = ' ';
-		(isset($objeto->email)) ? $email = '.<br /> E-mail '.$objeto->email.'<br />' : $email = ' ';
-		($objeto->CNPJ != 'não tem') ? $CNPJ = 'CNPJ '.$objeto->CNPJ.'<br />' : $CNPJ = ' ';
-		($objeto->telefone_cel != 'não tem') ? $cel = $objeto->telefone_cel.'/' : $cel = ' ';
-		($objeto->telefone_res != 'não tem') ? $res = $objeto->telefone_res : $res = ' ';
-		
-		echo $cidade.$bairro.$numero.$cep.$CNPJ.$estado.'Dados para contato<br /> '.'Tel '.$cel.$res.$email;
+		if($objeto->cidade):
+			$cidade = ' Situada em  '.$objeto->cidade;
+		else:
+			$cidade = ' ';
+		endif;	
+		if($objeto->bairro):
+			$bairro = ' ,  '.$objeto->bairro;
+		else:
+			$bairro = ' ';
+		endif;
+		if($objeto->rua):
+			 $rua = ' ,  '.$objeto->rua;
+		else:
+			 $rua = ''; 
+		endif;	
+		if($objeto->numero):
+			$numero = '<br /> número  '.$objeto->numero.'<br />';
+		else:
+			$numero = ' ';
+		endif;	
+		if($objeto->cep):
+			$cep = ' Cep '.$objeto->cep.'<br />';
+		else:
+			$cep = ' ';
+		endif;	
+		if($objeto->estado):
+			$estado = ' Estado '.$objeto->estado.'<br />';
+		else:
+			$estado = ' ';
+		endif;	
+		if($objeto->email):
+			$email = '.<br /> E-mail '.$objeto->email.'<br />';
+		else:
+			$email = ' ';
+		endif;	
+		if(($objeto->CNPJ) != ''):
+			$CNPJ = 'CNPJ '.$objeto->CNPJ.'<br />';
+		else:
+			$CNPJ = ' ';
+		endif;	
+		if($objeto->telefone_cel):
+			$cel = $objeto->telefone_cel.'/';
+		else:	
+			$cel = ' ';
+		endif;	
+		if($objeto->telefone_res):
+			$res = $objeto->telefone_res;
+		else:
+			$res = ' ';
+		endif;	
+		echo $cidade.$bairro.$rua.$numero.$cep.$CNPJ.$estado.' Dados para contato<br /> '.'Tel '.$cel.$res.$email;
 	endif;	
 }
 function antiInject($string){
@@ -270,7 +449,7 @@ function apagarDependencias($tipo = NULL,$id = NULL){
 					endwhile;
 				break;
 				
-			case 'Dono de propaganda':
+			case 'dono de propaganda':
 					$sql = "DELETE FROM propagandas WHERE dono_id=".$id;
 					$usu = new usuarioAdmin();
 					$usu->executaSQL($sql);
@@ -297,16 +476,19 @@ function criar_diretorio_loja($nome){
 	mkdir(dirname(__FILE__)."/img_lojas/$nome") or die('Um erro ocorreu, o pasta de nome '.$nome.' ja existe no sistema.');
 }
 
+function criar_diretorio_parceiros($parceiro_nome){
+	mkdir(dirname(__FILE__).'/img_parceiros/'.$parceiro_nome) or die('Um erro ocorreu com o arquivo '.$parceiro_nome.'. Não foi possivel salva-lo.');
+}
 function criar_diretorio_veiculos($loja_nome,$veiculo_id){
-	mkdir(dirname(__FILE__).'/img_lojas/'.$loja_nome.'/'.$veiculo_id) or die('Um erro ocorreu, o pasta de nome '.$veiculo_id.' ja existe no sistema.');
+	mkdir(dirname(__FILE__).'/img_lojas/'.$loja_nome.'/'.$veiculo_id) or die('Um erro ocorreu com o arquivo '.$veiculo_id.'. Não foi possivel salva-lo.');
 }
 
 function criar_diretorio_propagandas($prop_nome){
-	mkdir(dirname(__FILE__).'/img_propagandas/'.$prop_nome) or die('Um erro ocorreu, o pasta de nome '.$prop_nome.' ja existe no sistema.');
+	mkdir(dirname(__FILE__).'/img_propagandas/'.$prop_nome) or die('Um erro ocorreu com o arquivo '.$prop_nome.'  Não foi possivel salva-lo.');
 }
 
 function deletar_diretorio_veiculos($loja_nome,$veiculo_id){
-	rmdir(BASEURL.'/img_lojas/'.$loja_nome.'/'.$veiculo_id) or die('Um erro ocorreu, o pasta de nome '.$veiculo_id.' ja existe no sistema.');
+	rmdir(BASEURL.'/img_lojas/'.$loja_nome.'/'.$veiculo_id) or die('Um erro ocorreu com o arquivo '.$veiculo_id.'  Não foi possivel salva-lo.');
 }
 
 function deletar_loja($nome){
@@ -329,8 +511,10 @@ function upload_mestre($caminho,$file,$loja_nome,$logo_unico,$tipo_file,$tamanho
 	
 	if($tipo_file == 'img_lojas'):
 		$constante = IMGLOJASPATH;
-	else:
+	elseif($tipo_file == 'img_propagandas'):
 		$constante = IMGPROPAGANDASPATH;
+	else:
+		$constante = IMGPARCEIROSPATH;	
 	endif; 
 	if(!empty($nome) && in_array($tipo,$permite)):
 		upload($destino,$nome,$tamanho,$constante,$tipo,$constante."$loja_nome/$nome");

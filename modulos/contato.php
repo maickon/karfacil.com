@@ -11,16 +11,27 @@ if($tela):
 	<?php 
 
 	if(isset($_POST['enviar'])):
-		$nome = strip_tags(trim($_POST['nome']));
-		$email = strip_tags(trim($_POST['email']));
-		$assunto = strip_tags(trim($_POST['assunto']));
+		$nome = strip_tags(trim(antiInject($_POST['nome'])));
+		$email = strip_tags(trim(antiInject($_POST['email'])));
+		$assunto = strip_tags(trim(antiInject($_POST['assunto'])));
 		$mensagem = strip_tags(antiInject($_POST['mensagem']));
 		
-		echo $nome.'<br />';
-		echo $email.'<br />';
-		echo $assunto.'<br />';
-		echo $mensagem.'<br />';
-	endif;
+		$headers  = "From: $email\r\n";
+    	$headers .= "Reply-To: $email\r\n";
+         
+       	$corpo = "Formulário enviado\n";
+      	$corpo .= "Nome: " . $nome . "\n";
+       	$corpo .= "Email: " . $email . "\n";
+       	$corpo .= "Comentários: " . $mensagem . "\n";
+     
+       	$email_to = 'karfacil.com@gmail.com';
+      
+  	  	if(mail($email_to, $subject, $corpo, $headers)):
+        	echo '<p class="sucesso">E-mail enviado com sucesso !</p>'; 
+    	else:
+	        echo '<p class="falha">Um erro ocorreu, tente novamente.</p>';
+		endif;
+	endif;	
 ?>
 	<script type="text/javascript">
 				$(document).ready(function(){
@@ -38,11 +49,11 @@ if($tela):
 				<form class="userForm" method="post" action="">
 					<fieldset><legend>Entre em contato conosco, retornaremos o mais rápido possivel.</legend>
 					<ul>
-						<li><label for="nome">Nome:</label> <input type="text" size="50" name="nome" value="<?php echo $_POST['nome']='' ?>">
+						<li><label for="nome">Nome:</label> <input type="text" size="50" name="nome" value="">
 						</li>
-						<li><label for="email">Email:</label> <input type="text" size="50" name="email" value="<?php echo $_POST['email']='' ?>">
+						<li><label for="email">Email:</label> <input type="text" size="50" name="email" value="">
 						</li>
-						<li><label for="assunto">Assunto:</label> <input type="text" size="50" name="assunto" value="<?php echo $_POST['assunto']='' ?>">
+						<li><label for="assunto">Assunto:</label> <input type="text" size="50" name="assunto" value="">
 						</li>
 						<br />
 						<li><label for="mensagem">Mensagem:</label> <textarea name="mensagem" cols="20" rows="5"></textarea>
@@ -53,7 +64,11 @@ if($tela):
 					</ul>
 					</fieldset>		
 				</form>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 			</div>	
-	<?php 
-	endif;
-?>
+<?php endif; ?>

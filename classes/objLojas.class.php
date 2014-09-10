@@ -11,6 +11,7 @@ class objLojas extends base{
 				"dono_id"		=> NULL,
 				"nome" 			=> NULL,
 				"bairro"		=> NULL,
+				"rua"			=> NULL,
 				"numero"		=> NULL,
 				"cep"			=> NULL,
 				"logo"			=> NULL,
@@ -20,7 +21,9 @@ class objLojas extends base{
 				"estado"		=> NULL,
 				"telefone_cel"	=> NULL,
 				"telefone_res"	=> NULL,
-				"email"			=> NULL
+				"email"			=> NULL,
+				"google_map"	=> NULL,
+				"google_link"	=> NULL
 			);
 		else:
 			$this->campos_valores = $campos;	

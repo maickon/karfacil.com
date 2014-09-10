@@ -8,7 +8,7 @@
 	
 		<a href="?p=listar_propagandas" class="noticias p_noticia">
 			<p align="center" class="radius5 fundo_trans" title="confira somente a lista de todos os nossos patrocinadores.">			
-					Acessórios e enterterimento
+					Acessórios e entretenimento
 			</p>
 		</a>
 		

@@ -233,9 +233,7 @@ form input[type=text]:focus, form input[type=password]:focus, form textarea:focu
 .data{
 	margin-top: 2px;
 }
-.v_desc:hover{
-	background-color: #ffffff;
-}
+
 .titulo{
 	font-size: 25px;
 	border-bottom: #e00f16 1px solid;
@@ -300,6 +298,8 @@ form input[type=text]:focus, form input[type=password]:focus, form textarea:focu
 	width:450px;
 }
 .submit_prop{
-	margin-left: 280px;
-	
+	margin-left: 280px;	
+}
+.logo{
+
 }

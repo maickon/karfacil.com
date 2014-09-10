@@ -16,7 +16,7 @@ require_once(dirname(dirname(__FILE__))."/funcoes.php");
 
 if(isset($_GET['busca']) && $_GET['busca'] == TRUE):
 	$lojas = new objLojas();
-	$nome = $_POST['buscar'];
+	$nome = antiInject($_POST['buscar']);
 	$lojas->extras_select = " WHERE nome LIKE '%$nome%'";
 	$lojas->seleciona_tudo($lojas);
 	?>
@@ -33,6 +33,11 @@ if(isset($_GET['busca']) && $_GET['busca'] == TRUE):
 	      </div>   
 	    </div>
 	    <?php endwhile;?> 
+	    <?php if(($lojas->linhas_afetadas == 0)):?>
+			<div class="v_desc" align="center">
+				<p class="erro">Esta loja não consta em nosso banco de dados!</p>
+			</div>	
+		<?php endif;?>
 	</div>
 	<?php 
 else:
@@ -55,3 +60,25 @@ else:
 	    <?php endwhile;?> 
 	</div>
 <?php endif;?>		    
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

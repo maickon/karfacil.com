@@ -25,10 +25,10 @@ protegeArquivo(basename(__FILE__));
 			           <li><a href="?m=usuarios&t=listar"><span>Exibir</span></a></li>
 		           </ul>
 			   </li>
-			   <li class='has-sub '><a href="?m=veiculos_loja&t=listar"><span>Veículos de lojas</span></a>
+			   <li class='has-sub '><a href="?m=veiculos&t=listar&q=loja"><span>Veículos de lojas</span></a>
 		           <ul>
-			           <li><a href="?m=veiculos_loja&t=incluir"><span>Cadastrar </span></a></li>
-			           <li><a href="?m=veiculos_loja&t=listar"><span>Exibir</span></a></li>
+			           <li><a href="?m=veiculos&t=incluir&q=loja"><span>Cadastrar </span></a></li>
+			           <li><a href="?m=veiculos&t=listar&q=loja"><span>Exibir</span></a></li>
 		           </ul>
 			   </li>
 			   <li class='has-sub '><a href="?m=prop&t=listar"><span>Propagandas</span></a>
@@ -37,16 +37,28 @@ protegeArquivo(basename(__FILE__));
 			           <li><a href="?m=prop&t=listar"><span>Exibir</span></a></li>
 		           </ul>
 			   </li>
-			   <li class='has-sub '><a href="?m=veiculos_usu&t=listar"><span>Veículos exclusivos</span></a>
+			   <li class='has-sub '><a href="?m=veiculos&t=listar&q=usu"><span>Veículos exclusivos</span></a>
 		           <ul>
-			           <li><a href="?m=veiculos_usu&t=incluir"><span>Cadastrar </span></a></li>
-			           <li><a href="?m=veiculos_usu&t=listar"><span>Exibir</span></a></li>
+			           <li><a href="?m=veiculos&t=incluir&q=usu"><span>Cadastrar </span></a></li>
+			           <li><a href="?m=veiculos&t=listar&q=usu"><span>Exibir</span></a></li>
 		           </ul>
 			   </li>
 			    <li class='has-sub '><a href="?m=lojas&t=listar"><span>Lojas</span></a>
 		           <ul>
 			           <li><a href="?m=lojas&t=incluir"><span>Cadastrar </span></a></li>
 			           <li><a href="?m=lojas&t=listar"><span>Exibir</span></a></li>
+		           </ul>
+			   </li>
+			   <li class='has-sub '><a href="?m=agenda&t=listar"><span>Agenda</span></a>
+		           <ul>
+			           <li><a href="?m=agenda&t=incluir"><span>Cadastrar </span></a></li>
+			           <li><a href="?m=agenda&t=listar"><span>Exibir</span></a></li>
+		           </ul>
+			   </li>
+			   <li class='has-sub '><a href="?m=parceiros&t=listar"><span>Parceiros</span></a>
+		           <ul>
+			           <li><a href="?m=parceiros&t=incluir"><span>Cadastrar </span></a></li>
+			           <li><a href="?m=parceiros&t=listar"><span>Exibir</span></a></li>
 		           </ul>
 			   </li>
 			   <?php 

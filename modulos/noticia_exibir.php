@@ -3,7 +3,7 @@ require_once(dirname(dirname(__FILE__))."/funcoes.php");
 protegeArquivo(basename(__FILE__));
 
 $noticias = new noticias();
-$noticias->extras_select = " WHERE id=".$_GET['id'];
+$noticias->extras_select = " WHERE id=".antiInject($_GET['id']);
 $noticias->seleciona_tudo($noticias);
 $noticias_r  = $noticias->retorna_dados();
 ?>

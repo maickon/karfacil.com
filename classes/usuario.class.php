@@ -14,7 +14,9 @@ abstract class usuario extends base {
 				"senha"			=> NULL,
 				"ativo"			=> 's',
 				"tipo"			=> NULL,
-				"data_cadastro"	=> NULL
+				"data_cadastro"	=> NULL,
+				"telefone"		=> NULL,
+				"validade"		=> NULL,
 			);
 		else:
 			$this->campos_valores = $campos;	
@@ -36,7 +38,7 @@ abstract class usuario extends base {
 			$this->tratar_erro(__FILE__,__FUNCTION__,NULL,'Faltam parâmetros para executar a função.',TRUE);
 		endif;
 	}//fim usuJaExiste	
-	
+	/*
 	function deletarDependencias($tipo){
 		switch($tipo):
 			case 'dono de propaganda':
@@ -65,7 +67,7 @@ abstract class usuario extends base {
 		
 		return $this->executaSQL($sql);
 	}
-	
+	*/
 /*SQL
  * SELECT u.nome, p.nome FROM usuario u, propagandas p WHERE u.tipo =  'dono de propaganda' AND u.id = p.dono_id AND u.id =8 //apaga o usuario escolido e suas propagandas
  * SELECT u.nome, v.nome FROM usuario u, veiculos_usu v WHERE u.tipo='dono de carro' AND u.id=v.dono_id AND u.id=2 //vai apagar o usuario escolido e o seu carro

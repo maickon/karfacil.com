@@ -21,7 +21,7 @@ if($tela == 'principal'):
 			   <li class='has-sub '><a href="?p=quemsomos"><span>Quem somos</span></a></li>
 			   <li class='has-sub '><a href="?p=empresa"><span>Empresa</span></a></li>
 			   <li class='has-sub '><a href="?p=servicos"><span>Serviços</span></a></li>
-			   <li class='has-sub '><a href="?p=adm"><span>Administração</span></a></li>
+			   <li class='has-sub '><a href="?p=parceiros"><span>Parceiros</span></a></li>
 			   <li class='has-sub '><a href="?p=contato"><span>Contato</span></a></li>
 			   <li class='has-sub '><a href='?p=noticias_listar'><span>Noticias</span></a></li>
 			   <?php echo sair_index();?>
@@ -42,6 +42,9 @@ if($tela == 'principal'):
             	if (isset($_GET['p'])):
 	            	switch ($_GET['p']):
 						case 'adm': loadModuo('usuarios','login');
+						break;
+						
+						case 'parceiros': loadModuo('listar_parceiros','principal');
 						break;
 						
 						case 'quemsomos':loadModuo('quemsomos','principal');
@@ -90,11 +93,11 @@ if($tela == 'principal'):
 						break;
 	            	endswitch;
 	            else:
-	            	if(isset($_GET['desc_v']) && isset($_GET['id'])):
-	            		loadModuo('desc_veiculo','principal');
+	            	if(isset($_GET['desc_vl']) && isset($_GET['id'])):
+	            		loadModuo('desc_vl','principal');
 	            	else:
-	            		if(isset($_GET['desc_vu']) && isset($_GET['id'])):
-	            			loadModuo('desc_veiculo_usu','principal');
+	            		if(isset($_GET['desc_ve']) && isset($_GET['id'])):
+	            			loadModuo('desc_ve','principal');
 		            	else:
 		            		if(isset($_GET['desc_p']) && isset($_GET['id'])):
 		            			loadModuo('desc_prop','principal');
@@ -116,13 +119,14 @@ if($tela == 'principal'):
             <a href="#" alt="Propaganda premium1" title="Este espaço foi feito para apenas um cliente premium. Aqui sua logomarca sempre será vista, independente de quantas atualizações a página tiver." src="#">
 				<img id="img_logo_static" alt="Loja premium" src="<?php echo BASEURL.'img_karfacil/premium.png'?>" width="100" height="100">
 			</a>
+			<p>Olugin do facebook</p>
             <hr />
             <?php loadModuo('propagandas','principal')?>
         </div><!-- end .sidebar2(menu lateal direito) -->
         
         <div class="footer">
-            <p>Karfacil.com</p>
-            <p>Desenvolvido por Maickon Rangel &copy; 2013</p>
+            <p><a class="link" href="https://www.facebook.com/pages/karfacilcom/1374528982763546">Karfacil.com &copy; 2013</a> </p>
+            <p><a class="link" href="https://www.facebook.com/maickon.rangel">Desenvolvido por Maickon Rangel</a></p>
         </div><!-- end .footer(rodapé) -->
     
 </div><!-- end .container(fim do site inteiro) -->
